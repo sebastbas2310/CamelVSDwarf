@@ -1,0 +1,50 @@
+services:
+  database:
+    image: postgres:16-alpine
+    container_name: camel-vs-dwarf-db
+    environment:
+      POSTGRES_DB: ${DB_NAME:-camel_vs_dwarf}
+      POSTGRES_USER: ${DB_USERNAME:-camel_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-camel_password}
+    ports:
+      - "${DB_EXTERNAL_PORT:-5432}:5432"
+    volumes:
+      - camel-vs-dwarf-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-camel_user} -d ${DB_NAME:-camel_vs_dwarf}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - camel-vs-dwarf-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: camel-vs-dwarf-backend
+    environment:
+      SERVER_PORT: 8080
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-camel_vs_dwarf}
+      DB_USERNAME: ${DB_USERNAME:-camel_user}
+      DB_PASSWORD: ${DB_PASSWORD:-camel_password}
+      JPA_DDL_AUTO: ${JPA_DDL_AUTO:-update}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be configured}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-3600000}
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - camel-vs-dwarf-network
+
+volumes:
+  camel-vs-dwarf-data:
+    name: camel-vs-dwarf-data
+
+networks:
+  camel-vs-dwarf-network:
+    name: camel-vs-dwarf-network
