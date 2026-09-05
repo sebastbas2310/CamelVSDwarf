@@ -31,7 +31,7 @@ services:
       DB_USERNAME: ${DB_USERNAME:-camel_user}
       DB_PASSWORD: ${DB_PASSWORD:-camel_password}
       JPA_DDL_AUTO: ${JPA_DDL_AUTO:-update}
-      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be configured}
+      JWT_SECRET: ${JWT_SECRET:-local-development-secret-change-in-production}
       JWT_EXPIRATION: ${JWT_EXPIRATION:-3600000}
     ports:
       - "${BACKEND_PORT:-8080}:8080"
