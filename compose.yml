@@ -41,9 +41,26 @@ services:
     networks:
       - camel-vs-dwarf-network
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.7.3
+    container_name: keycloak
+    command: start-dev
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HTTP_ENABLED: "true"
+    ports:
+      - "8180:8080"
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+    networks:
+      - camel-vs-dwarf-network
+
 volumes:
   camel-vs-dwarf-data:
     name: camel-vs-dwarf-data
+
+  keycloak_data:
 
 networks:
   camel-vs-dwarf-network:
