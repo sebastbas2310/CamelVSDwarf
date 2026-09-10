@@ -1,13 +1,20 @@
 package com.example.camelvsdwarf.team;
 
-import com.example.camelvsdwarf.team.Team;
-import com.example.camelvsdwarf.team.TeamStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface TeamRepository extends JpaRepository<Team, Long> {
     boolean existsByNameIgnoreCase(String name);
-    Page<Team> findByNameContainingIgnoreCase(String name, Pageable pageable);
-    Page<Team> findByStatus(TeamStatus status, Pageable pageable);
+        boolean existsByNameIgnoreCaseAndIdNot(String name, Long id);
+
+    @Query("""
+                        select t from Team t
+                        where (:query is null or lower(t.name) like lower(concat('%', :query, '%')))
+                            and (:status is null or t.status = :status)
+                        """)
+        Page<Team> findByFilters(@Param("query") String query, @Param("status") teamStatus status,
+                                                         Pageable pageable);
 }

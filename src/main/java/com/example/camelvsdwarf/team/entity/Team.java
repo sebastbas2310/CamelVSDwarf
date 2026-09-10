@@ -18,7 +18,7 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 120)
+    @Column(nullable = false, length = 120, unique = true)
     private String name;
 
     @Column(length = 500)
@@ -29,7 +29,7 @@ public class Team {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private TeamStatus status = TeamStatus.ACTIVE;
+    private teamStatus status = teamStatus.ACTIVE;
 
     @Column(nullable = false)
     private int maximumMembers = 5;
@@ -42,6 +42,13 @@ public class Team {
 
     @Column(nullable = false)
     private int defeats;
+
+    @Column(nullable = false)
+    private String responsible_person;
+
+    @Column
+    private List<Participante> participantes = new ArrayList<>();
+}
 
     @PrePersist
     void onCreate() {

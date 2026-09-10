@@ -29,7 +29,7 @@ public class Team {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private TeamStatus status = TeamStatus.ACTIVE;
+    private teamStatus status = teamStatus.ACTIVE;
 
     @Column(nullable = false)
     private int maximumMembers = 5;

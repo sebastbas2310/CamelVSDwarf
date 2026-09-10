@@ -1,6 +1,8 @@
 package com.example.camelvsdwarf.competitor;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,7 +25,7 @@ public class Competitor {
     @Column(nullable = false, length = 120)
     private String name;
 
-    @Column(nullable = false, length = 80)
+    @Column(nullable = false, length = 80, unique = true)
     private String nickname;
 
     @Enumerated(EnumType.STRING)
@@ -32,9 +34,12 @@ public class Competitor {
 
     private LocalDate dateOfBirth;
 
+    @NotNull
+    @Positive
     @Column(precision = 8, scale = 2, nullable = false)
     private BigDecimal weight;
 
+    @Positive
     @Column(precision = 8, scale = 2, nullable = false)
     private BigDecimal height;
 
@@ -56,6 +61,9 @@ public class Competitor {
 
     @Column(nullable = false)
     private int completedRaces;
+
+    @Column(nullable = true)
+    private String Team;
 
     @PrePersist
     void onCreate() {

@@ -1,13 +1,21 @@
 package com.example.camelvsdwarf.competitor;
 
-import com.example.camelvsdwarf.competitor.Competitor;
-import com.example.camelvsdwarf.competitor.CompetitorStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface CompetitorRepository extends JpaRepository<Competitor, Long> {
     boolean existsByNicknameIgnoreCase(String nickname);
-    Page<Competitor> findByNameContainingIgnoreCaseOrNicknameContainingIgnoreCase(String name, String nickname, Pageable pageable);
-    Page<Competitor> findByStatus(CompetitorStatus status, Pageable pageable);
+        boolean existsByNicknameIgnoreCaseAndIdNot(String nickname, Long id);
+
+        @Query("""
+                        select c from Competitor c
+                        where (:query is null or lower(c.name) like lower(concat('%', :query, '%'))
+                                or lower(c.nickname) like lower(concat('%', :query, '%')))
+                            and (:status is null or c.status = :status)
+                        """)
+        Page<Competitor> findByFilters(@Param("query") String query, @Param("status") CompetitorStatus status,
+                                                                     Pageable pageable);
 }

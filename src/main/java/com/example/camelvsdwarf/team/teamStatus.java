@@ -1,6 +1,6 @@
 package com.example.camelvsdwarf.team;
 
-public enum TeamStatus {
+public enum teamStatus {
     ACTIVE,
     SUSPENDED,
     INACTIVE
