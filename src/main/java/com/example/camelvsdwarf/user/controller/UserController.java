@@ -47,7 +47,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest){
         UserResponse userResponse = userService.createUser(userRequest);
-        return ResponseEntity.created(URI.create("/api/v1/users/" + userResponse.getId())).body(userResponse);
+        return ResponseEntity.created(URI.create("/api/v1/users/" + userResponse.id())).body(userResponse);
     }
 
     //Actualizar usuario

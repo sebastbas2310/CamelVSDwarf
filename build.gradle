@@ -73,7 +73,7 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 
-    finalized tasks.named('jacocoTestReport')
+    finalizedBy tasks.named('jacocoTestReport')
 }
 
 jacoco {

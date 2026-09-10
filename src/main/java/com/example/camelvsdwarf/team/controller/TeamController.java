@@ -46,7 +46,7 @@ public class TeamController {
     @PostMapping
     public ResponseEntity<TeamResponse> createTeam(@Valid @RequestBody TeamRequest teamRequest) {
         TeamResponse teamResponse = teamService.createTeam(teamRequest);
-        return ResponseEntity.created(URI.create("/api/v1/teams/" + teamResponse.getId())).body(teamResponse);
+        return ResponseEntity.created(URI.create("/api/v1/teams/" + teamResponse.id())).body(teamResponse);
     }
 
     //Actualizar equipo
