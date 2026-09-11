@@ -2,9 +2,8 @@ FROM gradle:9.5.1-jdk21 AS build
 WORKDIR /workspace
 COPY gradlew gradlew.bat settings.gradle build.gradle ./
 COPY gradle ./gradle
-RUN ./gradlew dependencies --no-daemon
 COPY src ./src
-RUN ./gradlew clean bootJar --no-daemon
+RUN sh gradlew clean bootJar --no-daemon
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app
