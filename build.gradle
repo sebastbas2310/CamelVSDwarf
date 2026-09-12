@@ -15,33 +15,6 @@ java {
     }
 }
 
-sourceSets {
-    main {
-        java {
-            exclude 'com/example/camelvsdwarf/audit/entity/**'
-            exclude 'com/example/camelvsdwarf/audit/repository/**'
-            exclude 'com/example/camelvsdwarf/competitor/dto/**'
-            exclude 'com/example/camelvsdwarf/competitor/entity/**'
-            exclude 'com/example/camelvsdwarf/competitor/repository/**'
-            exclude 'com/example/camelvsdwarf/race/dto/**'
-            exclude 'com/example/camelvsdwarf/race/entity/**'
-            exclude 'com/example/camelvsdwarf/race/repository/**'
-            exclude 'com/example/camelvsdwarf/registration/dto/**'
-            exclude 'com/example/camelvsdwarf/registration/entity/**'
-            exclude 'com/example/camelvsdwarf/registration/repository/**'
-            exclude 'com/example/camelvsdwarf/result/dto/**'
-            exclude 'com/example/camelvsdwarf/result/entity/**'
-            exclude 'com/example/camelvsdwarf/result/repository/**'
-            exclude 'com/example/camelvsdwarf/team/dto/**'
-            exclude 'com/example/camelvsdwarf/team/entity/**'
-            exclude 'com/example/camelvsdwarf/team/repository/**'
-            exclude 'com/example/camelvsdwarf/user/dto/**'
-            exclude 'com/example/camelvsdwarf/user/entity/**'
-            exclude 'com/example/camelvsdwarf/user/repository/**'
-        }
-    }
-}
-
 repositories {
     mavenCentral()
 }
@@ -49,6 +22,8 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.security:spring-security-oauth2-jose'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     implementation 'org.springframework.boot:spring-boot-starter-actuator' //Agregado

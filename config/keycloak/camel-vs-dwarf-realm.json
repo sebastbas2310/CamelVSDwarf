@@ -1,0 +1,26 @@
+{
+  "realm": "camel-vs-dwarf",
+  "enabled": true,
+  "registrationAllowed": false,
+  "roles": {
+    "realm": [
+      { "name": "ADMINISTRATOR", "description": "Manage the whole racing system" },
+      { "name": "ORGANIZER", "description": "Manage races, registrations and results" },
+      { "name": "VIEWER", "description": "Read public racing information" }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "camel-vs-dwarf-api",
+      "name": "Camel vs Dwarf API",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "redirectUris": ["http://localhost:3000/*", "http://localhost:8080/*"],
+      "webOrigins": ["http://localhost:3000", "http://localhost:8080"]
+    }
+  ]
+}
