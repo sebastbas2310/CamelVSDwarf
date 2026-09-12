@@ -2,6 +2,6 @@ package com.example.camelvsdwarf.user;
 
 public enum Role {
     ADMINISTRATOR,
-    ORGANIZER,
+    RACE_ORGANIZER,
     VIEWER
 }

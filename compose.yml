@@ -31,13 +31,14 @@ services:
       DB_USERNAME: ${DB_USERNAME:-camel_user}
       DB_PASSWORD: ${DB_PASSWORD:-camel_password}
       JPA_DDL_AUTO: ${JPA_DDL_AUTO:-update}
-      JWT_SECRET: ${JWT_SECRET:-local-development-secret-change-in-production}
-      JWT_EXPIRATION: ${JWT_EXPIRATION:-3600000}
+      KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/eia-racing/protocol/openid-connect/certs
     ports:
       - "${BACKEND_PORT:-8080}:8080"
     depends_on:
       database:
         condition: service_healthy
+      keycloak:
+        condition: service_started
     networks:
       - camel-vs-dwarf-network
 
