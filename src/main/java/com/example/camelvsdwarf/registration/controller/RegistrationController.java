@@ -3,6 +3,7 @@ package com.example.camelvsdwarf.registration.controller;
 import com.example.camelvsdwarf.registration.RegistrationRequest;
 import com.example.camelvsdwarf.registration.RegistrationResponse;
 import com.example.camelvsdwarf.registration.RegistrationStatus;
+import com.example.camelvsdwarf.registration.RegistrationDecisionRequest;
 import com.example.camelvsdwarf.registration.RegistrationRequest;
 import com.example.camelvsdwarf.registration.service.RegistrationService;
 import com.example.camelvsdwarf.shared.dto.PageResponse;
@@ -45,7 +46,7 @@ public class RegistrationController {
     @PostMapping
     public ResponseEntity<RegistrationResponse> createRegistration(@Valid @RequestBody RegistrationRequest registrationRequest) {
         RegistrationResponse registrationResponse = registrationService.createRegistration(registrationRequest);
-        return ResponseEntity.created(URI.create("/api/v1/registrations/" + registrationResponse.getId())).body(registrationResponse);
+        return ResponseEntity.created(URI.create("/api/v1/registrations/" + registrationResponse.id())).body(registrationResponse);
     }
 
     //Actualizar inscripción

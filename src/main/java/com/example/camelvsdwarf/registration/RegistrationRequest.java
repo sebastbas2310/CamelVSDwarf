@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 public record RegistrationRequest(
+        @NotNull Long raceId,
         @NotNull ParticipantType participantType,
         Long competitorId,
         Long teamId,

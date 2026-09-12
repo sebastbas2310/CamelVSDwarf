@@ -2,7 +2,7 @@ package com.example.camelvsdwarf.race.controller;
 
 import com.example.camelvsdwarf.race.RaceRequest;
 import com.example.camelvsdwarf.race.RaceResponse;
-import com.exampl.camelvsdwarf.race.RaceStatus;
+import com.example.camelvsdwarf.race.RaceStatus;
 import com.example.camelvsdwarf.race.RaceStatusRequest;
 import com.example.camelvsdwarf.race.service.RaceService;
 import com.example.camelvsdwarf.shared.dto.PageResponse;
@@ -45,7 +45,7 @@ public class RaceController {
     @PostMapping
     public ResponseEntity<RaceResponse> createRace(@Valid @RequestBody RaceRequest raceRequest) {
         RaceResponse raceResponse = raceService.createRace(raceRequest);
-        return ResponseEntity.created(URI.create("/api/v1/races/" + raceResponse.getId())).body(raceResponse);
+        return ResponseEntity.created(URI.create("/api/v1/races/" + raceResponse.id())).body(raceResponse);
     }
 
     //Actualizar carrera
