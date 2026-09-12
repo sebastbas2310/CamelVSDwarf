@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.team;
+package com.example.camelvsdwarf.team.dto;
 
 public enum TeamStatus {
     ACTIVE,

@@ -4,15 +4,13 @@ import com.example.camelvsdwarf.race.*;
 import com.example.camelvsdwarf.shared.dto.PageResponse;
 import com.example.camelvsdwarf.shared.exception.BusinessConflictException;
 import com.example.camelvsdwarf.shared.exception.ResourceNotFoundException;
-import com.example.camelvsdwarf.user.AppUser;
-import com.example.camelvsdwarf.user.AppUserRepository;
+import com.example.camelvsdwarf.user.entity.AppUser;
+import com.example.camelvsdwarf.user.repository.AppUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.audit;
+package com.example.camelvsdwarf.audit.entity;
 
 import java.time.LocalDateTime;
 

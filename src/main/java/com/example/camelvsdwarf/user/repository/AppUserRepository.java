@@ -1,6 +1,6 @@
-package com.example.camelvsdwarf.user;
+package com.example.camelvsdwarf.user.repository;
 
-import com.example.camelvsdwarf.user.AppUser;
+import com.example.camelvsdwarf.user.entity.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

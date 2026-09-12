@@ -1,6 +1,4 @@
-package com.example.camelvsdwarf.user;
-
-import com.example.camelvsdwarf.user.Role;
+package com.example.camelvsdwarf.user.dto;
 
 import java.time.LocalDateTime;
 

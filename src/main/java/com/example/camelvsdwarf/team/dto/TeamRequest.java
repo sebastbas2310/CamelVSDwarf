@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.team;
+package com.example.camelvsdwarf.team.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.registration;
+package com.example.camelvsdwarf.registration.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

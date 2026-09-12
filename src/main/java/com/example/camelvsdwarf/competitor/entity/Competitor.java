@@ -1,5 +1,7 @@
-package com.example.camelvsdwarf.competitor;
+package com.example.camelvsdwarf.competitor.entity;
 
+import com.example.camelvsdwarf.competitor.dto.CompetitorStatus;
+import com.example.camelvsdwarf.competitor.dto.CompetitorType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

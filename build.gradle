@@ -15,32 +15,6 @@ java {
     }
 }
 
-sourceSets {
-    main {
-        java {
-            exclude 'com/example/camelvsdwarf/audit/entity/**'
-            exclude 'com/example/camelvsdwarf/audit/repository/**'
-            exclude 'com/example/camelvsdwarf/competitor/dto/**'
-            exclude 'com/example/camelvsdwarf/competitor/entity/**'
-            exclude 'com/example/camelvsdwarf/competitor/repository/**'
-            exclude 'com/example/camelvsdwarf/race/dto/**'
-            exclude 'com/example/camelvsdwarf/race/entity/**'
-            exclude 'com/example/camelvsdwarf/race/repository/**'
-            exclude 'com/example/camelvsdwarf/registration/dto/**'
-            exclude 'com/example/camelvsdwarf/registration/entity/**'
-            exclude 'com/example/camelvsdwarf/registration/repository/**'
-            exclude 'com/example/camelvsdwarf/result/dto/**'
-            exclude 'com/example/camelvsdwarf/result/entity/**'
-            exclude 'com/example/camelvsdwarf/result/repository/**'
-            exclude 'com/example/camelvsdwarf/team/dto/**'
-            exclude 'com/example/camelvsdwarf/team/entity/**'
-            exclude 'com/example/camelvsdwarf/team/repository/**'
-            exclude 'com/example/camelvsdwarf/user/dto/**'
-            exclude 'com/example/camelvsdwarf/user/entity/**'
-            exclude 'com/example/camelvsdwarf/user/repository/**'
-        }
-    }
-}
 
 repositories {
     mavenCentral()
@@ -187,8 +161,18 @@ tasks.register('coberturaAbrir') {
 // solo las clases. Eso rompía el Dockerfile, porque "COPY build/libs/*.jar
 // app.jar" encontraba dos archivos y Docker falla cuando el origen es múltiple
 // y el destino es un solo archivo.
-tasks.named('jar') {
-    enabled = false
+tasks.named('test') {
+    useJUnitPlatform()
+
+    testLogging {
+        events "failed"
+        exceptionFormat "full"
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
+    }
+
+    finalizedBy tasks.named('jacocoTestReport')
 }
 
 // Nombre fijo del jar ejecutable: así el Dockerfile lo copia por nombre exacto

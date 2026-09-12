@@ -1,6 +1,6 @@
-package com.example.camelvsdwarf.audit;
+package com.example.camelvsdwarf.audit.entity;
 
-import com.example.camelvsdwarf.user.AppUser;
+import com.example.camelvsdwarf.user.entity.AppUser;
 
 import jakarta.persistence.*;
 import lombok.Getter;

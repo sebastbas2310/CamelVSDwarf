@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.race;
+package com.example.camelvsdwarf.race.dto;
 
 import com.example.camelvsdwarf.race.RaceType;
 import jakarta.validation.constraints.Future;

@@ -1,5 +1,6 @@
-package com.example.camelvsdwarf.user;
+package com.example.camelvsdwarf.user.entity;
 
+import com.example.camelvsdwarf.user.dto.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

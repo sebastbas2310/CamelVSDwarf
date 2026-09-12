@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.race;
+package com.example.camelvsdwarf.race.repository;
 
 import com.example.camelvsdwarf.race.Race;
 import com.example.camelvsdwarf.race.RaceStatus;

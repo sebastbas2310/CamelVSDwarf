@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.team;
+package com.example.camelvsdwarf.team.repository;
 
 import com.example.camelvsdwarf.team.Team;
 import com.example.camelvsdwarf.team.TeamStatus;

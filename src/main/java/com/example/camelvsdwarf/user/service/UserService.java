@@ -4,10 +4,12 @@ import com.example.camelvsdwarf.shared.dto.PageResponse;
 import com.example.camelvsdwarf.shared.exception.BusinessConflictException;
 import com.example.camelvsdwarf.shared.exception.ResourceNotFoundException;
 import com.example.camelvsdwarf.user.*;
+import com.example.camelvsdwarf.user.dto.UserResponse;
+import com.example.camelvsdwarf.user.entity.AppUser;
+import com.example.camelvsdwarf.user.repository.AppUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
     private final AppUserRepository repository;
-    private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public PageResponse<UserResponse> getAllUsers(String query, UserStatus status, int page, int size, String sortBy, String sortDir) {
@@ -28,6 +29,6 @@ public class UserService {
     @Transactional public UserResponse updateUserStatus(Long id, UserStatusRequest request) { AppUser u = get(id); u.setEnabled(request.status() == UserStatus.ACTIVE); return toResponse(repository.save(u)); }
     @Transactional public void deleteUser(Long id) { AppUser u = get(id); u.setEnabled(false); repository.save(u); }
     private AppUser get(Long id) { return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " was not found")); }
-    private void apply(AppUser u, UserRequest r) { u.setFullName(r.fullName().trim()); u.setEmail(r.email().trim().toLowerCase()); u.setRole(r.role()); if (r.password() != null && !r.password().isBlank()) u.setPasswordHash(passwordEncoder.encode(r.password())); }
+    private void apply(AppUser u, UserRequest r) { u.setFullName(r.fullName().trim()); u.setEmail(r.email().trim().toLowerCase()); u.setRole(r.role());}
     private UserResponse toResponse(AppUser u) { return new UserResponse(u.getId(), u.getFullName(), u.getEmail(), u.getRole(), u.isEnabled(), u.getCreatedAt()); }
 }

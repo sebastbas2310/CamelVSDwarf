@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.audit;
+package com.example.camelvsdwarf.audit.repository;
 
 import com.example.camelvsdwarf.audit.AuditLog;
 import org.springframework.data.domain.Page;

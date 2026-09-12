@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.competitor;
+package com.example.camelvsdwarf.competitor.dto;
 
 public enum CompetitorType {
     DWARF,

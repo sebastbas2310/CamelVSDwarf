@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.result;
+package com.example.camelvsdwarf.result.dto;
 
 public enum ResultStatus {
     FINISHED,

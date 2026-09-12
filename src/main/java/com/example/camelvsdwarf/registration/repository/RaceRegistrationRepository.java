@@ -1,6 +1,7 @@
-package com.example.camelvsdwarf.registration;
+package com.example.camelvsdwarf.registration.repository;
 
 import com.example.camelvsdwarf.registration.RaceRegistration;
+import com.example.camelvsdwarf.registration.dto.RegistrationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

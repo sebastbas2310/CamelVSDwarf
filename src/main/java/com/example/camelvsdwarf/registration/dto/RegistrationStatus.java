@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.registration;
+package com.example.camelvsdwarf.registration.dto;
 
 public enum RegistrationStatus {
     PENDING,

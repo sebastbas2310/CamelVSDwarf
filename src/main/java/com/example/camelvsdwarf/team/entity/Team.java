@@ -1,5 +1,6 @@
-package com.example.camelvsdwarf.team;
+package com.example.camelvsdwarf.team.entity;
 
+import com.example.camelvsdwarf.team.dto.TeamStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

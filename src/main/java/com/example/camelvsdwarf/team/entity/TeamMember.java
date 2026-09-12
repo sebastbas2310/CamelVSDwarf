@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.team;
+package com.example.camelvsdwarf.team.entity;
 
 import com.example.camelvsdwarf.competitor.Competitor;
 

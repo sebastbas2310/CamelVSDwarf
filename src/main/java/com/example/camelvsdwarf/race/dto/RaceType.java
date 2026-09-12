@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.race;
+package com.example.camelvsdwarf.race.dto;
 
 public enum RaceType {
     INDIVIDUAL,

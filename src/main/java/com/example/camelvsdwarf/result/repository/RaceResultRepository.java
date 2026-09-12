@@ -1,6 +1,7 @@
-package com.example.camelvsdwarf.result;
+package com.example.camelvsdwarf.result.repository;
 
-import com.example.camelvsdwarf.result.RaceResult;
+import com.example.camelvsdwarf.result.dto.ResultStatus;
+import com.example.camelvsdwarf.result.entity.RaceResult;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

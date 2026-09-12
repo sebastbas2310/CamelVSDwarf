@@ -1,6 +1,7 @@
-package com.example.camelvsdwarf.team;
+package com.example.camelvsdwarf.team.repository;
 
 import com.example.camelvsdwarf.team.TeamMember;
+import com.example.camelvsdwarf.team.dto.TeamStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

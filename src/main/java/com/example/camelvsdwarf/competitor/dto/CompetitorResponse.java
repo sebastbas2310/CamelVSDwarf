@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.competitor;
+package com.example.camelvsdwarf.competitor.dto;
 
 import com.example.camelvsdwarf.competitor.CompetitorStatus;
 import com.example.camelvsdwarf.competitor.CompetitorType;

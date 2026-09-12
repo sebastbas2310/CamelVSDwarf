@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,12 +27,19 @@ import java.util.stream.Collectors;
 public class SecurityConfig {
 
     @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoints de lectura pública
+                        // Endpoints públicos de autenticación y salud
+                        .requestMatchers("/api/auth/**", "/actuator/health").permitAll()
+                        // Endpoints de lectura pública de la aplicación
                         .requestMatchers(HttpMethod.GET, "/api/v1/standings/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/races/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/results/**").permitAll()

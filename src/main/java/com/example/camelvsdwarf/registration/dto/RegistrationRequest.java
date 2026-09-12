@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.registration;
+package com.example.camelvsdwarf.registration.dto;
 
 import com.example.camelvsdwarf.registration.ParticipantType;
 import jakarta.validation.constraints.Min;

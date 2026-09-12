@@ -3,7 +3,7 @@ package com.example.camelvsdwarf.registration;
 import com.example.camelvsdwarf.competitor.Competitor;
 import com.example.camelvsdwarf.race.Race;
 import com.example.camelvsdwarf.team.Team;
-import com.example.camelvsdwarf.user.AppUser;
+import com.example.camelvsdwarf.user.entity.AppUser;
 
 import jakarta.persistence.*;
 import lombok.Getter;

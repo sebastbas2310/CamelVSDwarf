@@ -5,7 +5,7 @@ import com.example.camelvsdwarf.result.*;
 import com.example.camelvsdwarf.shared.dto.PageResponse;
 import com.example.camelvsdwarf.shared.exception.BusinessConflictException;
 import com.example.camelvsdwarf.shared.exception.ResourceNotFoundException;
-import com.example.camelvsdwarf.user.AppUserRepository;
+import com.example.camelvsdwarf.user.repository.AppUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;

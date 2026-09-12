@@ -1,14 +1,15 @@
 package com.example.camelvsdwarf.user.controller;
 
 import com.example.camelvsdwarf.user.UserRequest;
-import com.example.camelvsdwarf.user.UserResponse;
 import com.example.camelvsdwarf.user.UserStatus;
 import com.example.camelvsdwarf.user.UserStatusRequest;
+
+import com.example.camelvsdwarf.user.dto.UserResponse;
+
 import com.example.camelvsdwarf.user.service.UserService;
 import com.example.camelvsdwarf.shared.dto.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

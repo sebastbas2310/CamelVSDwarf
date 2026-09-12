@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.user;
+package com.example.camelvsdwarf.user.dto;
 
 public enum Role {
     ADMINISTRATOR,

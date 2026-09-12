@@ -1,4 +1,4 @@
-package com.example.camelvsdwarf.result;
+package com.example.camelvsdwarf.result.dto;
 
 import com.example.camelvsdwarf.result.ResultStatus;
 import jakarta.validation.constraints.DecimalMin;

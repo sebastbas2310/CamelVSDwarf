@@ -1,6 +1,8 @@
-package com.example.camelvsdwarf.race;
+package com.example.camelvsdwarf.race.entity;
 
-import com.example.camelvsdwarf.user.AppUser;
+import com.example.camelvsdwarf.race.dto.RaceStatus;
+import com.example.camelvsdwarf.race.dto.RaceType;
+import com.example.camelvsdwarf.user.entity.AppUser;
 
 import jakarta.persistence.*;
 import lombok.Getter;
