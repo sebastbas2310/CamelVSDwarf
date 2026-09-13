@@ -14,6 +14,12 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 @EnableWebSecurity
@@ -25,12 +31,13 @@ public class SecurityConfig {
 
     @Bean
     JwtDecoder jwtDecoder(
-            @Value("${SUPABASE_PROJECT_ID:your-project-id}") String projectId
+            @Value("${SUPABASE_PROJECT_ID:your-project-id}") String projectId,
+            @Value("${supabase.jwt.secret:change-me-supabase-jwt-secret}") String jwtSecret
     ) {
         String issuerUri = "https://" + projectId + ".supabase.co/auth/v1";
-        NimbusJwtDecoder decoder = NimbusJwtDecoder
-                .withJwkSetUri(issuerUri + "/.well-known/jwks.json")
-                .build();
+        SecretKeySpec secretKey = new SecretKeySpec(
+            jwtSecret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        NimbusJwtDecoder decoder = NimbusJwtDecoder.withSecretKey(secretKey).build();
         decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer(issuerUri));
         return decoder;
     }
@@ -38,11 +45,27 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
+            .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/public/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
         return http.build();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource(
+            @Value("${app.frontend-url:http://localhost:5173}") String frontendUrl
+    ) {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(java.util.List.of(frontendUrl));
+        configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(java.util.List.of("Authorization", "Content-Type", "apikey"));
+        configuration.setExposedHeaders(java.util.List.of("Location"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

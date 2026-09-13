@@ -180,7 +180,7 @@ Cada endpoint debe documentarse con:
 
 ---
 
-## 9. Autenticación con Keycloak
+## 9. Autenticación con Keycloak (obsoleto: usar Supabase Auth)
 
 El frontend debe autenticarse mediante **Keycloak** usando OpenID Connect (OIDC). El frontend no debe consultar la base de datos ni Supabase directamente. El flujo es:
 
@@ -438,3 +438,168 @@ KEYCLOAK_ISSUER_URI=https://keycloak.example.com/realms/camel-vs-dwarf
 ```
 
 No se deben colocar contraseñas, `JWT_SECRET`, `sb_secret` ni tokens en el README, en `.env.example` ni en el código fuente.
+
+## 10. Integración vigente para Lovable: Supabase Auth
+
+> Esta es la configuración vigente. La sección anterior de Keycloak es histórica y no debe usarse para implementar el frontend.
+
+Este repositorio contiene únicamente el backend Spring Boot. La interfaz mostrada en las capturas pertenece al frontend de Lovable. El frontend debe usar Supabase Auth para registrar e iniciar sesión; no debe implementar usuarios demo ni guardar contraseñas localmente.
+
+### Variables del frontend
+
+Configura estas variables en Lovable:
+
+```env
+VITE_SUPABASE_URL=https://mrftaeijsdhiulsxqyme.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+VITE_API_BASE_URL=https://camelvsdwarf.onrender.com
+```
+
+La publishable key puede usarse en el navegador. Nunca uses `sb_secret_...` en el frontend.
+
+### Registro de la pantalla Create an account
+
+Los campos de la pantalla son:
+
+```text
+Full name
+Email
+Password
+Repeat password
+Requested role
+```
+
+Primero valida que las contraseñas coincidan. Luego registra únicamente la identidad en Supabase:
+
+```javascript
+const { data, error } = await supabase.auth.signUp({
+  email,
+  password
+});
+```
+
+No envíes `fullName` ni `role` a `/auth/v1/signup`; esos son datos del perfil de la aplicación.
+
+Después de que Supabase devuelva una sesión, crea el perfil en el backend:
+
+```javascript
+const { data: sessionData } = await supabase.auth.getSession();
+const accessToken = sessionData.session?.access_token;
+
+await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v1/users/me`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${accessToken}`
+  },
+  body: JSON.stringify({ fullName })
+});
+```
+
+El backend crea el perfil en `public.app_users` y asigna `VIEWER` como rol inicial. El campo `Requested role` no debe permitir que un usuario se asigne `ADMINISTRATOR` a sí mismo. Para producción, registra siempre como `VIEWER`; un administrador puede cambiar el rol posteriormente.
+
+Si la confirmación de email está activa, `signUp` puede devolver usuario sin sesión. Muestra un mensaje para confirmar el correo y no llames a `/api/v1/users/me` hasta tener un `access_token`.
+
+### Inicio de sesión de la pantalla Sign in
+
+El campo `Username or email` debe enviarse como `email`:
+
+```javascript
+const { data, error } = await supabase.auth.signInWithPassword({
+  email,
+  password
+});
+```
+
+Después de un login exitoso, Supabase mantiene la sesión en el navegador. Para llamar al backend:
+
+```javascript
+async function apiFetch(path, options = {}) {
+  const { data } = await supabase.auth.getSession();
+  const accessToken = data.session?.access_token;
+
+  if (!accessToken) {
+    throw new Error("La sesión de Supabase no está activa");
+  }
+
+  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
+
+  if (response.status === 401) {
+    await supabase.auth.signOut();
+    throw new Error("La sesión expiró");
+  }
+
+  if (!response.ok) throw await response.json();
+  return response.status === 204 ? null : response.json();
+}
+```
+
+### Endpoints de Supabase Auth
+
+Con el SDK de Supabase, Lovable no necesita construir manualmente las URLs. Si se usa Postman, las rutas son:
+
+```text
+POST https://mrftaeijsdhiulsxqyme.supabase.co/auth/v1/signup
+POST https://mrftaeijsdhiulsxqyme.supabase.co/auth/v1/token?grant_type=password
+```
+
+Ambas requieren el header `apikey` con la publishable key. El login devuelve `access_token`; ese token es el único valor que debe enviarse como `Authorization: Bearer ...` al backend.
+
+### Perfil y tablas
+
+Supabase Auth guarda la identidad en `auth.users`. El backend guarda el perfil en `public.app_users`, relacionado mediante `supabase_user_id`.
+
+Antes de probar `/api/v1/users/me`, ejecuta el script:
+
+```text
+docs/supabase-auth-migration.sql
+```
+
+Endpoint para crear o recuperar el perfil:
+
+```text
+POST https://camelvsdwarf.onrender.com/api/v1/users/me
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+Body:
+
+```json
+{
+  "fullName": "Usuario de Prueba"
+}
+```
+
+### Variables del backend en Render
+
+```env
+SUPABASE_PROJECT_ID=mrftaeijsdhiulsxqyme
+SUPABASE_JWT_SECRET=JWT_SECRET_DE_SUPABASE
+FRONTEND_URL=https://TU-FRONTEND.onrender.com
+SPRING_DATASOURCE_URL=jdbc:postgresql://HOST_POOLER:PUERTO/postgres?sslmode=require
+SPRING_DATASOURCE_USERNAME=postgres.PROJECT_REF
+SPRING_DATASOURCE_PASSWORD=PASSWORD_DE_POSTGRES
+```
+
+`SUPABASE_JWT_SECRET` es distinto de `JWT_SECRET` y de las claves `sb_publishable_...`/`sb_secret_...`. No lo publiques ni lo incluyas en el frontend.
+
+### Estados que Lovable debe manejar
+
+```text
+201 o 200: operación correcta
+400: datos de formulario inválidos
+401: falta el access_token, expiró o Render no tiene el JWT secret correcto
+403: token válido, pero sin permisos suficientes
+409: conflicto, por ejemplo email o nombre duplicado
+429: Supabase limitó temporalmente los correos de registro
+```
+
+La pantalla de login debe eliminar los usuarios demo `admin`, `organizer` y `viewer`. Esas credenciales no existen en Supabase Auth y no deben usarse como fallback cuando la API está disponible.
