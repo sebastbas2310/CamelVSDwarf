@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -23,6 +25,18 @@ public class UserService {
         return PageResponse.from(users.map(this::toResponse));
     }
     @Transactional(readOnly = true) public UserResponse getUserById(Long id) { return toResponse(get(id)); }
+    @Transactional
+    public UserResponse createOrGetProfile(UUID supabaseUserId, String email, UserProfileRequest request) {
+        AppUser user = repository.findBySupabaseUserId(supabaseUserId)
+                .orElseGet(() -> repository.findByEmailIgnoreCase(email).orElseGet(AppUser::new));
+
+        user.setSupabaseUserId(supabaseUserId);
+        user.setEmail(email.trim().toLowerCase());
+        user.setFullName(request.fullName().trim());
+        if (user.getRole() == null) user.setRole(Role.VIEWER);
+        user.setEnabled(true);
+        return toResponse(repository.save(user));
+    }
     @Transactional public UserResponse createUser(UserRequest request) { if (repository.existsByEmailIgnoreCase(request.email())) throw new BusinessConflictException("Email is already in use"); AppUser u = new AppUser(); apply(u, request); return toResponse(repository.save(u)); }
     @Transactional public UserResponse updateUser(Long id, UserRequest request) { AppUser u = get(id); apply(u, request); return toResponse(repository.save(u)); }
     @Transactional public UserResponse updateUserStatus(Long id, UserStatusRequest request) { AppUser u = get(id); u.setEnabled(request.status() == UserStatus.ACTIVE); return toResponse(repository.save(u)); }

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "app_users", uniqueConstraints = @UniqueConstraint(name = "uk_app_user_email", columnNames = "email"))
@@ -24,8 +25,11 @@ public class AppUser {
     @Column(nullable = false, length = 160)
     private String email;
 
-    @Column(nullable = false)
+    @Column(length = 255)
     private String passwordHash;
+
+    @Column(name = "supabase_user_id", unique = true)
+    private UUID supabaseUserId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)

@@ -1,6 +1,7 @@
 package com.example.camelvsdwarf.user.controller;
 
 import com.example.camelvsdwarf.user.UserRequest;
+import com.example.camelvsdwarf.user.UserProfileRequest;
 import com.example.camelvsdwarf.user.UserResponse;
 import com.example.camelvsdwarf.user.UserStatus;
 import com.example.camelvsdwarf.user.UserStatusRequest;
@@ -10,9 +11,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -44,6 +48,16 @@ public class UserController {
     }
 
     //Crear usuario
+    @PostMapping("/me")
+    public ResponseEntity<UserResponse> createMyProfile(
+            @AuthenticationPrincipal Jwt jwt,
+            @Valid @RequestBody UserProfileRequest profileRequest) {
+        String email = jwt.getClaimAsString("email");
+        UserResponse userResponse = userService.createOrGetProfile(UUID.fromString(jwt.getSubject()), email, profileRequest);
+        return ResponseEntity.ok(userResponse);
+    }
+
+    //Crear usuario local, reservado para compatibilidad administrativa
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest){
         UserResponse userResponse = userService.createUser(userRequest);
