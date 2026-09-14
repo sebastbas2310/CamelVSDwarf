@@ -18,9 +18,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -31,13 +28,10 @@ public class SecurityConfig {
 
     @Bean
     JwtDecoder jwtDecoder(
-            @Value("${SUPABASE_PROJECT_ID:your-project-id}") String projectId,
-            @Value("${supabase.jwt.secret:change-me-supabase-jwt-secret}") String jwtSecret
+            @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri:https://mrftaeijsdhiulsxqyme.supabase.co/auth/v1/.well-known/jwks.json}") String jwkSetUri,
+            @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri:https://mrftaeijsdhiulsxqyme.supabase.co/auth/v1}") String issuerUri
     ) {
-        String issuerUri = "https://" + projectId + ".supabase.co/auth/v1";
-        SecretKeySpec secretKey = new SecretKeySpec(
-            jwtSecret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
-        NimbusJwtDecoder decoder = NimbusJwtDecoder.withSecretKey(secretKey).build();
+        NimbusJwtDecoder decoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
         decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer(issuerUri));
         return decoder;
     }
