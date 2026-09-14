@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -31,7 +32,10 @@ public class SecurityConfig {
             @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri:https://mrftaeijsdhiulsxqyme.supabase.co/auth/v1/.well-known/jwks.json}") String jwkSetUri,
             @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri:https://mrftaeijsdhiulsxqyme.supabase.co/auth/v1}") String issuerUri
     ) {
-        NimbusJwtDecoder decoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
+        NimbusJwtDecoder decoder = NimbusJwtDecoder
+            .withJwkSetUri(jwkSetUri)
+            .jwsAlgorithm(SignatureAlgorithm.ES256)
+            .build();
         decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer(issuerUri));
         return decoder;
     }
