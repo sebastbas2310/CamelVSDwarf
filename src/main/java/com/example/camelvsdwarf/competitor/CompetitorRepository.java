@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CompetitorRepository extends JpaRepository<Competitor, Long> {
     boolean existsByNicknameIgnoreCase(String nickname);
+    boolean existsByNicknameIgnoreCaseAndIdNot(String nickname, Long id);
     Page<Competitor> findByNameContainingIgnoreCaseOrNicknameContainingIgnoreCase(String name, String nickname, Pageable pageable);
     Page<Competitor> findByStatus(CompetitorStatus status, Pageable pageable);
 }

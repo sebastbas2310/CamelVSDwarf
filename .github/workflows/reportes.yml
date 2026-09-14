@@ -1,0 +1,47 @@
+name: Reportes - CamelVSDwarf
+
+on:
+  workflow_dispatch:
+    inputs:
+      rama:
+        description: 'Rama para generar los reportes'
+        required: false
+        default: 'main'
+
+permissions:
+  contents: read
+
+jobs:
+  reportes:
+    name: Generar reportes de pruebas
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout de la rama
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.rama }}
+
+      - name: Configurar Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
+      - name: Dar permisos a gradlew
+        run: chmod +x gradlew
+
+      - name: Generar reportes de tests y cobertura
+        run: ./gradlew clean test jacocoTestReport --no-daemon
+        continue-on-error: true
+
+      - name: Subir artefactos
+        uses: actions/upload-artifact@v4
+        with:
+          name: reportes-camelvsdwarf
+          path: |
+            build/reports/tests/test/
+            build/reports/jacoco/test/html/
+          retention-days: 7
+          if-no-files-found: error
