@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Team {
 
+    public static final int MAXIMUM_MEMBERS = 5;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,7 +34,7 @@ public class Team {
     private TeamStatus status = TeamStatus.ACTIVE;
 
     @Column(nullable = false)
-    private int maximumMembers = 5;
+    private int maximumMembers = MAXIMUM_MEMBERS;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
