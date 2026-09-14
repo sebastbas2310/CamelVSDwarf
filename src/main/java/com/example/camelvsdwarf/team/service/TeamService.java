@@ -64,7 +64,7 @@ public class TeamService {
         Competitor competitor = competitorRepository.findById(competitorId).orElseThrow(() -> new ResourceNotFoundException("Competitor not found"));
         if (team.getStatus() != TeamStatus.ACTIVE || competitor.getStatus() != CompetitorStatus.ACTIVE) throw new BusinessConflictException("Team and competitor must be active");
         if (teamMemberRepository.existsByTeamIdAndCompetitorId(teamId, competitorId)) throw new BusinessConflictException("Competitor is already in this team");
-        if (teamMemberRepository.countByTeamId(teamId) >= team.getMaximumMembers()) throw new BusinessConflictException("Team capacity exceeded");
+        if (teamMemberRepository.countByTeamId(teamId) >= Team.MAXIMUM_MEMBERS) throw new BusinessConflictException("Team capacity exceeded");
         if (teamMemberRepository.existsByCompetitorIdAndTeam_Status(competitorId, TeamStatus.ACTIVE)) throw new BusinessConflictException("Competitor already belongs to an active team");
         TeamMember member = new TeamMember(); member.setTeam(team); member.setCompetitor(competitor); teamMemberRepository.save(member);
     }
@@ -77,6 +77,6 @@ public class TeamService {
     }
 
     private Team getTeam(Long id) { return teamRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Team with ID " + id + " was not found")); }
-    private void apply(Team team, TeamRequest request) { team.setName(request.name().trim()); team.setDescription(request.description()); team.setCoach(request.coach().trim()); team.setMaximumMembers(request.maximumMembers()); }
-    private TeamResponse toResponse(Team team) { return new TeamResponse(team.getId(), team.getName(), team.getDescription(), team.getCoach(), team.getStatus(), team.getMaximumMembers(), team.getCreatedAt(), team.getVictories(), team.getDefeats(), teamMemberRepository.findByTeamId(team.getId()).stream().map(m -> m.getCompetitor().getId()).toList()); }
+    private void apply(Team team, TeamRequest request) { team.setName(request.name().trim()); team.setDescription(request.description()); team.setCoach(request.coach().trim()); team.setMaximumMembers(Team.MAXIMUM_MEMBERS); }
+    private TeamResponse toResponse(Team team) { return new TeamResponse(team.getId(), team.getName(), team.getDescription(), team.getCoach(), team.getStatus(), Team.MAXIMUM_MEMBERS, team.getCreatedAt(), team.getVictories(), team.getDefeats(), teamMemberRepository.findByTeamId(team.getId()).stream().map(m -> m.getCompetitor().getId()).toList()); }
 }

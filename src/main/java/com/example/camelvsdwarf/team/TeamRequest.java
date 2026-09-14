@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Size;
 public record TeamRequest(
         @NotBlank @Size(max = 120) String name,
         @Size(max = 500) String description,
-        @NotBlank @Size(max = 120) String coach,
-        @Min(1) int maximumMembers
+        @NotBlank @Size(max = 120) String coach
 ) {
 }
